@@ -1,0 +1,42 @@
+# DS-02 Demand Forecasting — verified working on Python 3.11 and 3.12 (CPU).
+#
+# NOTE: the original spec pinned older versions (torch 2.2.2, pytorch-forecasting
+# 1.0.0, evidently 0.4.25). Those have NO wheels for Python 3.12 and/or break on
+# NumPy 2. The versions below were installed and run end-to-end (ingest -> train
+# -> predict -> agent -> drift -> API) on Python 3.12 + NumPy 2.
+
+# ---- Core data stack ----
+pandas==2.3.3
+numpy==2.0.2
+python-dotenv==1.0.1
+
+# ---- Time-series modelling (TFT) ----
+# pytorch-forecasting 1.7 builds on the `lightning` package (not legacy
+# `pytorch_lightning`); both are installed for compatibility.
+torch==2.9.1
+lightning==2.6.5
+pytorch-lightning==2.6.5
+pytorch-forecasting==1.7.0
+scikit-learn==1.8.0
+
+# ---- Feature engineering ----
+tsfresh==0.21.2
+statsmodels==0.14.6
+
+# ---- Exogenous signals ----
+transformers==4.57.3        # FinBERT news sentiment
+pytrends==4.9.2             # Google Trends
+requests==2.32.5            # OpenWeatherMap API
+
+# ---- Replenishment agent ----
+langchain==1.3.4
+langchain-groq==1.1.2
+
+# ---- Experiment tracking & drift ----
+mlflow==3.13.0             # uses a local SQLite backend (see train.py)
+evidently==0.4.40          # 0.4.40 is NumPy-2 compatible; keeps the Report API
+
+# ---- API ----
+fastapi==0.115.0
+uvicorn==0.34.0
+pydantic==2.9.2

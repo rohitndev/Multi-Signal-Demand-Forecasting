@@ -5,9 +5,13 @@
 > (weather, Google Trends, news sentiment), an LLM-powered replenishment agent,
 > experiment tracking, and data-drift monitoring — all served behind a REST API.
 
----
+```text
+💡 Click "⋮≡" at top right to show the table of contents.
+```
 
 ## Project Overview
+
+![project-overview](./screenshots/project-overview.jpeg)
 
 DS-02 forecasts daily retail demand for the **Rossmann Store Sales** dataset and
 turns those forecasts into business actions. It produces **probabilistic
@@ -68,10 +72,11 @@ full pipeline completes in **~20 seconds** on CPU.
 - **7. Installation** — create a virtual environment and install dependencies.
 - **8. Steps to Run This Project** — the one-command driver (8.1), the individual
   pipeline stages (8.2), and how to launch the API (8.3).
-- **9. Output** — console output from each stage (training, forecast, agent,
-  drift, API).
+- **9. Output** — output from each stage (training, forecast, agent, drift, API).
 - **10. API Reference** — request/response shapes and sample `curl` commands.
 - **11. Troubleshooting** — common errors and their fixes.
+
+Dataset: [Rossmann Store Sales - Kaggle](https://www.kaggle.com/datasets/c2-search-not-working/rossmann-store-sales)
 
 ---
 
@@ -79,42 +84,22 @@ full pipeline completes in **~20 seconds** on CPU.
 
 ### 2.1 Architecture Diagram
 
-```
-                        ┌──────────────────────────────────────────────┐
-                        │              EXOGENOUS SIGNALS               │
-                        │  OpenWeatherMap   pytrends     FinBERT        │
-                        │   (weather)     (Trends)   (news sentiment)   │
-                        └───────────────────┬──────────────────────────┘
-                                            │  signals.py
-                                            ▼
-  ┌────────────┐   ingestion.py   ┌──────────────────┐   features.py   ┌──────────────┐
-  │  Rossmann  │ ───────────────▶ │   clean.csv      │ ──────────────▶ │  Feature     │
-  │  CSVs      │  merge/validate  │ (SQLite-friendly)│  lags/rolling/  │  Matrix      │
-  │ train+store│                  │                  │  tsfresh/promo  │  (39 cols)   │
-  └────────────┘                  └──────────────────┘                 └──────┬───────┘
-                                                                              │ train.py
-                                                                              ▼
-                          ┌───────────────────────────────────────────────────────────┐
-                          │     Temporal Fusion Transformer (pytorch-forecasting)     │
-                          │     Quantile loss → P10 / P50 / P90   •   28-day horizon   │
-                          └───────┬───────────────────────────────────┬───────────────┘
-                                  │ MLflow (SQLite)                    │ models/tft_model.ckpt
-                                  ▼                                    ▼
-                          ┌───────────────┐                  ┌──────────────────┐
-                          │  Experiment   │                  │   predict.py     │
-                          │  Tracking     │                  │  P10/P50/P90 JSON│
-                          │  MAPE / MAE   │                  └────────┬─────────┘
-                          └───────────────┘                           │
-                                                                      ▼
-   ┌──────────────┐   drift.py    ┌──────────────────────┐   ┌─────────────────────────┐
-   │ Evidently AI │ ◀──────────── │   FastAPI (api.py)   │   │  agent.py               │
-   │ DataDrift    │   GET /drift  │  /forecast           │──▶│  LangChain + Groq       │
-   │ reference vs │               │  /replenish          │   │  → Purchase Order        │
-   │ current      │               │  /drift              │   │    (qty + urgency)       │
-   └──────────────┘               └──────────────────────┘   └─────────────────────────┘
-```
+![architecture](./screenshots/architecture.jpeg)
 
-> Image version (optional): `docs/screenshots/architecture.png`
+From the **"End-to-end Architecture"** image, the flow is:
+
+1. **Exogenous signals** (OpenWeatherMap, pytrends, FinBERT) are fetched by
+   `signals.py` and merged into the sales frame.
+2. **Rossmann CSVs** are cleaned and validated by `ingestion.py` into a
+   SQLite-friendly `clean.csv`.
+3. `features.py` builds the **feature matrix** (lags, rolling stats, calendar,
+   promo, tsfresh auto-features).
+4. `train.py` trains the **Temporal Fusion Transformer** with quantile loss
+   (P10 / P50 / P90 over a 28-day horizon), logs metrics to **MLflow**, and saves
+   the checkpoint.
+5. `predict.py` serves the forecast; `agent.py` turns it into a purchase order;
+   `drift.py` monitors feature/MAPE drift with **Evidently AI**; and `api.py`
+   exposes everything over **REST**.
 
 ### 2.2 Component Breakdown
 
@@ -155,8 +140,7 @@ ds02-demand-forecasting/
 ├── data/
 │   ├── raw/                  # train.csv + store.csv go here
 │   └── processed/            # clean.csv is written here
-├── docs/
-│   └── screenshots/          # put output PNGs here (referenced in §9)
+├── screenshots/             # README images (referenced in §2 and §9)
 ├── scripts/
 │   └── make_synthetic_data.py# generate Rossmann-schema test data
 ├── src/
@@ -288,6 +272,8 @@ mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db
 # open http://127.0.0.1:5000
 ```
 
+![mlflow-ui](./screenshots/mlflow-ui.jpeg)
+
 ### 8.3 Run the REST API
 
 ```bash
@@ -295,80 +281,50 @@ uvicorn src.api:app --reload
 # interactive docs at http://127.0.0.1:8000/docs
 ```
 
+![api-swagger](./screenshots/api-swagger.jpeg)
+
 ---
 
 ## 9. Output
 
 ### 9.1 Training (TFT + MLflow)
 
-```text
-======================================================================
-  [2/5] Training TFT (5 epochs, 6 stores)
-======================================================================
-`Trainer.fit` stopped: `max_epochs=5` reached.
+![training-output](./screenshots/training-output.jpeg)
 
-Training complete.
-  Final MAPE : 6.90%
-  Final MAE  : 401.05
-  Checkpoint : models\tft_model.ckpt
-```
+The training run reaches a **final MAPE of ~6.90%** and **MAE ~401** over a
+5-epoch / 6-store demo, then saves the checkpoint to `models/tft_model.ckpt` and
+logs the metrics to MLflow.
 
 ### 9.2 28-Day Forecast
 
-```text
-28-day forecast for Store 1
-Date               P10       P50       P90
-------------------------------------------
-2014-08-09     5692.78   6320.91   6672.14
-2014-08-10     4973.58   5625.04   6192.65
-2014-08-11     3678.77   4034.75   4491.83
-2014-08-12     4177.96   4662.22   5131.87
-2014-08-13     3457.82    3862.4   4266.17
-...            (28 rows) ...
-2014-09-05     4164.71   4654.91   5136.84
-```
+![forecast-output](./screenshots/forecast-output.jpeg)
+
+A probabilistic 28-day forecast for a store, showing the **P10 / P50 / P90**
+quantile bands (lower / median / upper) per day.
 
 ### 9.3 Replenishment Agent
 
-```text
---- Replenishment Recommendation ---
-Action          : urgent
-Recommended qty : 162348
-Message         :
-Store 1 replenishment: URGENT.
-Projected 28-day demand is 139456.26 units vs 5000 on hand.
-Recommended purchase order quantity: 162348 units.
-```
+![agent-output](./screenshots/agent-output.jpeg)
+
+The LangChain + Groq agent compares projected 28-day demand against inventory on
+hand and drafts a purchase-order message with an **action (urgency)** and a
+**recommended quantity**.
 
 ### 9.4 Drift Report
 
-```text
---- Drift Report ---
-Drifted features : ['Customers', 'Sales', 'month', 'sales_lag_7',
-                    'sales_rolling_mean_28', 'sales_rolling_mean_7']
-Drift score      : 0.75
-Reference MAPE   : 18.02%
-Current MAPE     : 19.69%
-MAPE degraded >3%: False
-```
+![drift-output](./screenshots/drift-output.jpeg)
+
+The Evidently AI drift report lists the **drifted features**, a **drift score**,
+and compares **reference vs current MAPE** to flag degradation beyond the
+threshold.
 
 ### 9.5 API Endpoints
 
-```jsonc
-// POST /forecast  { "store_id": 1, "forecast_days": 5 }
-{"store_id":1,"forecasts":[
-  {"date":"2014-08-09","p10":5692.78,"p50":6320.91,"p90":6672.14},
-  {"date":"2014-08-10","p10":4973.58,"p50":5625.04,"p90":6192.65}, ...]}
+![api-response](./screenshots/api-response.jpeg)
 
-// POST /replenish { "store_id": 1, "current_inventory": 500, "reorder_point": 100 }
-{"store_id":1,"action":"urgent","recommended_qty":171599,
- "message":"Store 1 replenishment: URGENT. ..."}
-
-// GET /drift
-{"drifted_features":["Customers","Sales","month","sales_lag_7",
- "sales_rolling_mean_28","sales_rolling_mean_7"],
- "drift_score":0.75,"reference_mape":18.02,"current_mape":19.69,"mape_flag":false}
-```
+Sample responses from the three REST endpoints (`/forecast`, `/replenish`,
+`/drift`) exercised through the FastAPI Swagger UI / `curl`. For the request and
+response shapes, see [Section 10 — API Reference](#10-api-reference).
 
 ---
 

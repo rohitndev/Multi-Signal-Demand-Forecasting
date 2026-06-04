@@ -1,0 +1,202 @@
+﻿.\.venv\Scripts\python.exe : 
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field 
+"model_name" in PromptModelConfig has conflict with protected namespace "model_".
+At line:1 char:33
++ ... hotsfolder; .\.venv\Scripts\python.exe run_all.py --synthetic *>&1 |  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\rohit\ds02-d...space "model_".:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\pytorch_forecasting\data\encoders.py:402: UserWarning: Found 
+1 unknown classes which were set to NaN
+  warnings.warn(
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 'loss' 
+is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using 
+`self.save_hyperparameters(ignore=['loss'])`.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 
+'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore 
+them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+\U0001f4a1 Tip: For seamless cloud logging and experiment tracking, try installing 
+[litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically 
+to the Lightning Experiments platform.
+
+======================================================================
+  [0/5] Generating synthetic dataset
+======================================================================
+Synthetic Rossmann-style data written:
+  D:\rohit\ds02-demand-forecasting\data\raw\train.csv  (1,320 rows)
+  D:\rohit\ds02-demand-forecasting\data\raw\store.csv  (6 rows)
+  NOTE: synthetic data for testing only ù replace with the real Kaggle CSVs.
+
+======================================================================
+  [1/5] Ingestion (load, merge, clean, validate)
+======================================================================
+Ingestion complete.
+  Rows (open days)   : 1,134
+  Stores             : 6
+  Date range         : 2014-01-01 -> 2014-08-08
+  Saved clean CSV to : D:\rohit\ds02-demand-forecasting\data\processed\clean.csv
+
+======================================================================
+  [2/5] Training TFT (5 epochs, 6 stores)
+======================================================================
++-----------------------------------------------------------------------------+
+|    | Name                               | Type     | Params | Mode  | FLOPs |
+|----+------------------------------------+----------+--------+-------+-------|
+| 0  | loss                               | Quantilà |      0 | train |     0 |
+| 1  | logging_metrics                    | ModuleLà |      0 | train |     0 |
+| 2  | input_embeddings                   | MultiEmà |     99 | train |     0 |
+| 3  | prescalers                         | ModuleDà |    176 | train |     0 |
+| 4  | static_variable_selection          | Variablà |  1.8 K | train |     0 |
+| 5  | encoder_variable_selection         | Variablà |  5.6 K | train |     0 |
+| 6  | decoder_variable_selection         | Variablà |  3.4 K | train |     0 |
+| 7  | static_context_variable_selection  | GatedReà |  1.1 K | train |     0 |
+| 8  | static_context_initial_hidden_lstm | GatedReà |  1.1 K | train |     0 |
+| 9  | static_context_initial_cell_lstm   | GatedReà |  1.1 K | train |     0 |
+| 10 | static_context_enrichment          | GatedReà |  1.1 K | train |     0 |
+| 11 | lstm_encoder                       | LSTM     |  2.2 K | train |     0 |
+| 12 | lstm_decoder                       | LSTM     |  2.2 K | train |     0 |
+| 13 | post_lstm_gate_encoder             | GatedLià |    544 | train |     0 |
+| 14 | post_lstm_add_norm_encoder         | AddNorm  |     32 | train |     0 |
+| 15 | static_enrichment                  | GatedReà |  1.4 K | train |     0 |
+| 16 | multihead_attn                     | Interprà |    808 | train |     0 |
+| 17 | post_attn_gate_norm                | GateAddà |    576 | train |     0 |
+| 18 | pos_wise_ff                        | GatedReà |  1.1 K | train |     0 |
+| 19 | pre_output_gate_norm               | GateAddà |    576 | train |     0 |
+| 20 | output_layer                       | Linear   |     51 | train |     0 |
++-----------------------------------------------------------------------------+
+Trainable params: 24.8 K                                                       
+Non-trainable params: 0                                                        
+Total params: 24.8 K                                                           
+Total estimated model params size (MB): 0.099                                  
+Modules in train mode: 415                                                     
+Modules in eval mode: 0                                                        
+Total FLOPs: 0                                                                 
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
+`num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
+`num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+`Trainer.fit` stopped: `max_epochs=5` reached.
+Epoch 4/4  ------------------ 9/9 0:00:01 ò 0:00:00 6.65it/s train_loss_step:  
+                                                             225.886 val_loss: 
+                                                             252.917           
+                                                             train_loss_epoch: 
+                                                             233.253           
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\logger_connector\logger_c
+onnector.py:76: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `lightning.pytorch` 
+package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use 
+`CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install 
+lightning[extra]` or one of them to enable TensorBoard support by default
+\U0001f4a1 Tip: For seamless cloud logging and experiment tracking, try installing 
+[litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically 
+to the Lightning Experiments platform.
+\U0001f4a1 Tip: For seamless cloud uploads and versioning, try installing 
+[litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the 
+Lightning model registry.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+The 'predict_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
+`num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+`weights_only` was not set, defaulting to `False`.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 'loss' 
+is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using 
+`self.save_hyperparameters(ignore=['loss'])`.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 
+'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore 
+them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\pytorch_forecasting\data\encoders.py:402: UserWarning: Found 
+1 unknown classes which were set to NaN
+  warnings.warn(
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+\U0001f4a1 Tip: For seamless cloud logging and experiment tracking, try installing 
+[litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically 
+to the Lightning Experiments platform.
+\U0001f4a1 Tip: For seamless cloud uploads and versioning, try installing 
+[litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the 
+Lightning model registry.
+D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+The 'predict_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
+`num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
+
+Training complete.
+  Final MAPE : 7.28%
+  Final MAE  : 414.24
+  Checkpoint : D:\rohit\ds02-demand-forecasting\models\tft_model.ckpt
+
+>>> Training MAPE: 7.28%
+
+======================================================================
+  [3/5] Forecasting store 1 (28-day P10/P50/P90)
+======================================================================
+
+28-day forecast for Store 1
+Date               P10       P50       P90
+------------------------------------------
+2014-08-09     5560.02   6195.52   6557.23
+2014-08-10     5136.79   5800.24   6244.25
+2014-08-11     3775.55   4219.17   4542.51
+2014-08-12     4171.79   4692.75   5203.07
+2014-08-13     3566.13   3996.54   4397.27
+2014-08-14     5476.32   6093.45   6468.28
+2014-08-15     4675.55   5218.91   5547.28
+2014-08-16     4431.93   5003.65   5347.94
+2014-08-17     4439.81   5002.55   5500.49
+2014-08-18     3503.74   3910.87   4185.53
+2014-08-19     4309.02   4822.65   5264.02
+2014-08-20     5475.96   6091.79   6467.38
+2014-08-21     5458.39   6114.83   6503.79
+2014-08-22     5011.15   5676.69    6136.6
+2014-08-23     3771.76   4216.92   4543.25
+2014-08-24     4205.98   4732.42    5243.5
+2014-08-25     4355.29   4871.76   5315.25
+2014-08-26     5470.15    6087.5   6464.32
+2014-08-27     4686.68   5232.52   5558.26
+2014-08-28     5074.24   5749.15   6196.19
+2014-08-29     4416.12   4969.72   5470.73
+2014-08-30     3484.01   3887.42   4155.32
+2014-08-31     3553.06   3979.14   4373.12
+2014-09-01     5469.63   6100.53   6473.31
+2014-09-02     4670.07   5232.22   5562.61
+2014-09-03     4394.36   4980.53    5325.2
+2014-09-04     4425.71   4997.11   5485.93
+2014-09-05     4151.98   4677.53   5184.06
+
+======================================================================
+  [4/5] Replenishment agent (inventory=5000)
+======================================================================
+[agent] No GROQ_API_KEY set -> using template message.
+
+--- Replenishment Recommendation ---
+Action          : urgent
+Recommended qty : 166065
+Message         :
+Store 1 replenishment: URGENT.
+Projected 28-day demand is 142554.08 units vs 5000 on hand.
+Recommended purchase order quantity: 166065 units.
+
+======================================================================
+  [5/5] Drift detection (reference vs current window)
+======================================================================
+
+--- Drift Report ---
+Drifted features : ['Customers', 'Sales', 'month', 'sales_lag_7', 'sales_rolling_mean_28', 'sales_rolling_mean_7']
+Drift score      : 0.75
+Reference MAPE   : 18.02%
+Current MAPE     : 19.69%
+MAPE degraded >3%: False
+
+======================================================================
+  PIPELINE COMPLETE in 31.3s
+  Clean data : D:\rohit\ds02-demand-forecasting\data\processed\clean.csv
+  Checkpoint : D:\rohit\ds02-demand-forecasting\models\tft_model.ckpt
+  Next: serve it with  ->  uvicorn src.api:app --reload
+======================================================================

@@ -89,30 +89,32 @@ Dataset: [Rossmann Store Sales - Kaggle](https://www.kaggle.com/datasets/c2-sear
 From the **"End-to-end Architecture"** image, the flow is:
 
 1. **Exogenous signals** (OpenWeatherMap, pytrends, FinBERT) are fetched by
-   `signals.py` and merged into the sales frame.
-2. **Rossmann CSVs** are cleaned and validated by `ingestion.py` into a
+   [`signals.py`](./src/signals.py) and merged into the sales frame.
+2. **Rossmann CSVs** are cleaned and validated by [`ingestion.py`](./src/ingestion.py) into a
    SQLite-friendly `clean.csv`.
-3. `features.py` builds the **feature matrix** (lags, rolling stats, calendar,
+3. [`features.py`](./src/features.py) builds the **feature matrix** (lags, rolling stats, calendar,
    promo, tsfresh auto-features).
-4. `train.py` trains the **Temporal Fusion Transformer** with quantile loss
+4. [`train.py`](./src/train.py) trains the **Temporal Fusion Transformer** with quantile loss
    (P10 / P50 / P90 over a 28-day horizon), logs metrics to **MLflow**, and saves
    the checkpoint.
-5. `predict.py` serves the forecast; `agent.py` turns it into a purchase order;
-   `drift.py` monitors feature/MAPE drift with **Evidently AI**; and `api.py`
+5. [`predict.py`](./src/predict.py) serves the forecast; [`agent.py`](./src/agent.py) turns it into a purchase order;
+   [`drift.py`](./src/drift.py) monitors feature/MAPE drift with **Evidently AI**; and [`api.py`](./src/api.py)
    exposes everything over **REST**.
 
 ### 2.2 Component Breakdown
 
 | # | Module | Responsibility |
 |---|--------|----------------|
-| 2.2.1 | `ingestion.py` | Load `train.csv` + `store.csv`, merge on Store, parse dates, drop closed days, validate nulls, write `clean.csv`. |
-| 2.2.2 | `signals.py` | Fetch weather, Google Trends, and FinBERT news sentiment; merge into the sales frame (all with offline fallbacks). |
-| 2.2.3 | `features.py` | Lag (7/14/28), rolling mean/std, calendar, promo, `days_since_last_promo`, and tsfresh auto-features. |
-| 2.2.4 | `train.py` | Build `TimeSeriesDataSet`, train the TFT with quantile loss, log MAPE/MAE to MLflow, save checkpoint. |
-| 2.2.5 | `predict.py` | Load checkpoint, return a 28-day P10/P50/P90 forecast for a store. |
-| 2.2.6 | `agent.py` | Decide order urgency from forecast vs inventory; draft a PO message via Groq LLM. |
-| 2.2.7 | `drift.py` | Split reference/current windows, run Evidently DataDrift, flag MAPE degradation. |
-| 2.2.8 | `api.py` | Expose `/forecast`, `/replenish`, `/drift` over REST. |
+| 2.2.1 | [`ingestion.py`](./src/ingestion.py) | Load `train.csv` + `store.csv`, merge on Store, parse dates, drop closed days, validate nulls, write `clean.csv`. |
+| 2.2.2 | [`signals.py`](./src/signals.py) | Fetch weather, Google Trends, and FinBERT news sentiment; merge into the sales frame (all with offline fallbacks). |
+| 2.2.3 | [`features.py`](./src/features.py) | Lag (7/14/28), rolling mean/std, calendar, promo, `days_since_last_promo`, and tsfresh auto-features. |
+| 2.2.4 | [`train.py`](./src/train.py) | Build `TimeSeriesDataSet`, train the TFT with quantile loss, log MAPE/MAE to MLflow, save checkpoint. |
+| 2.2.5 | [`predict.py`](./src/predict.py) | Load checkpoint, return a 28-day P10/P50/P90 forecast for a store. |
+| 2.2.6 | [`agent.py`](./src/agent.py) | Decide order urgency from forecast vs inventory; draft a PO message via Groq LLM. |
+| 2.2.7 | [`drift.py`](./src/drift.py) | Split reference/current windows, run Evidently DataDrift, flag MAPE degradation. |
+| 2.2.8 | [`api.py`](./src/api.py) | Expose `/forecast`, `/replenish`, `/drift` over REST. |
+
+Shared configuration lives in [`config.py`](./src/config.py) (paths + `.env` loading), and [`run_all.py`](./run_all.py) orchestrates all 8 modules end-to-end.
 
 ---
 
@@ -181,10 +183,10 @@ The project runs **without any keys** (mock fallbacks). For live signals, get fr
 
 | Variable | Where | Used by |
 |----------|-------|---------|
-| `OPENWEATHER_API_KEY` | https://openweathermap.org/api | `signals.weather()` |
-| `GROQ_API_KEY` | https://console.groq.com/keys | `agent.py` |
+| `OPENWEATHER_API_KEY` | https://openweathermap.org/api | [`signals.py`](./src/signals.py) |
+| `GROQ_API_KEY` | https://console.groq.com/keys | [`agent.py`](./src/agent.py) |
 
-Copy `.env.example` → `.env` and fill them in.
+Copy [`.env.example`](./.env.example) → `.env` and fill them in.
 
 ---
 
@@ -212,7 +214,7 @@ data/raw/store.csv
 ### 6.2 Synthetic Data (No Kaggle Needed)
 
 To smoke-test the whole pipeline without a Kaggle account, generate synthetic
-CSVs in the exact Rossmann schema:
+CSVs in the exact Rossmann schema using [`scripts/make_synthetic_data.py`](./scripts/make_synthetic_data.py):
 
 ```bash
 python -m scripts.make_synthetic_data
@@ -235,7 +237,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-> `requirements.txt` pins versions verified to install and run together on
+> [`requirements.txt`](./requirements.txt) pins versions verified to install and run together on
 > Python 3.12 + NumPy 2 (the full pipeline reaches ~7 % MAPE on a 5-epoch run).
 
 ---
@@ -244,7 +246,7 @@ pip install -r requirements.txt
 
 ### 8.1 One-Shot Pipeline
 
-`run_all.py` chains **ingest → train → predict → agent → drift**:
+[`run_all.py`](./run_all.py) chains **ingest → train → predict → agent → drift**:
 
 ```bash
 python run_all.py --synthetic        # generate test data + run everything
@@ -266,6 +268,14 @@ python -m src.agent                  # 5) replenishment agent demo
 python -m src.drift                  # 6) drift report
 ```
 
+Related files (one per stage):
+- 1) [`src/ingestion.py`](./src/ingestion.py)
+- 2) [`src/features.py`](./src/features.py)
+- 3) [`src/train.py`](./src/train.py)
+- 4) [`src/predict.py`](./src/predict.py)
+- 5) [`src/agent.py`](./src/agent.py)
+- 6) [`src/drift.py`](./src/drift.py)
+
 View MLflow experiments (local SQLite backend):
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db
@@ -280,6 +290,8 @@ mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db
 uvicorn src.api:app --reload
 # interactive docs at http://127.0.0.1:8000/docs
 ```
+
+Related file: [`src/api.py`](./src/api.py)
 
 ![api-swagger](./screenshots/api-swagger.jpeg)
 

@@ -1,0 +1,32 @@
+# apprunner.yaml — App Runner *source-code* deployment config (ALTERNATIVE path).
+#
+# The PRIMARY, recommended path for this project is image-based: build the
+# Dockerfile, push to Amazon ECR, and let App Runner pull it (provisioned by
+# infra/terraform/). That matches the architecture diagram (ECR -> App Runner)
+# and bakes in the trained checkpoint + data.
+#
+# This file is only used if you instead connect App Runner directly to the
+# GitHub repo (Source = code, not image). Caveats for that path:
+#   * App Runner's managed Python runtime maxes out at 3.11.
+#   * The trained checkpoint (models/tft_model.ckpt) and data/processed/clean.csv
+#     are git-ignored, so a source build will NOT have them unless you commit
+#     them or fetch them from S3 in the build step below.
+version: 1.0
+runtime: python311
+build:
+  commands:
+    build:
+      - pip install --upgrade pip
+      - pip install --index-url https://download.pytorch.org/whl/cpu torch==2.9.1
+      - pip install -r requirements.txt
+      # Uncomment to pull production artifacts from S3 instead of committing them:
+      # - aws s3 cp s3://$ARTIFACTS_BUCKET/models/tft_model.ckpt models/tft_model.ckpt
+      # - aws s3 cp s3://$CURATED_BUCKET/clean.csv data/processed/clean.csv
+run:
+  runtime-version: 3.11
+  command: uvicorn src.api:app --host 0.0.0.0 --port 8000
+  network:
+    port: 8000
+  env:
+    - name: PYTHONUNBUFFERED
+      value: "1"

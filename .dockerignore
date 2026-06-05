@@ -1,0 +1,27 @@
+# Keep the build context small and the image clean. NOTE: .dockerignore is
+# independent of .gitignore — the model checkpoint and clean.csv are git-ignored
+# but MUST be sent to the build, so they are intentionally NOT excluded here.
+
+# Virtual envs / caches (huge, never needed in the image)
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Local experiment tracking / logs (regenerated, not served by the API)
+mlruns/
+lightning_logs/
+
+# Raw data is not needed at serve time (the API reads data/processed/clean.csv)
+data/raw/
+
+# VCS, CI, IaC, docs, and images — irrelevant to the runtime
+.git/
+.github/
+infra/
+docs/
+screenshots/
+*.md
+.env
+.env.example

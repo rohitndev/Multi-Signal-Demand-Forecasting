@@ -57,6 +57,7 @@ full pipeline completes in **~20 seconds** on CPU.
    - 9.5 [API Endpoints](#95-api-endpoints)
 10. [API Reference](#10-api-reference)
 11. [Troubleshooting](#11-troubleshooting)
+12. [AWS Deployment](#12-aws-deployment)
 
 ### Table of Contents — Brief Explanation
 
@@ -75,6 +76,8 @@ full pipeline completes in **~20 seconds** on CPU.
 - **9. Output** — output from each stage (training, forecast, agent, drift, API).
 - **10. API Reference** — request/response shapes and sample `curl` commands.
 - **11. Troubleshooting** — common errors and their fixes.
+- **12. AWS Deployment** — containerize and deploy to AWS App Runner (ECR + S3 +
+  IAM + CloudWatch) with Terraform; see [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md).
 
 Dataset: [Rossmann Store Sales - Kaggle](https://www.kaggle.com/datasets/c2-search-not-working/rossmann-store-sales)
 
@@ -132,6 +135,12 @@ Shared configuration lives in [`config.py`](./src/config.py) (paths + `.env` loa
 | Drift detection | **Evidently AI** | Feature-drift monitoring (replaces ADWIN) |
 | API | **FastAPI + Uvicorn** | REST endpoints |
 | Storage | local **CSV + SQLite** | Local storage (replaces Snowflake) |
+| Container | **Docker** | Reproducible serving image |
+| Cloud serving | **AWS App Runner + ECR** | Managed HTTPS API hosting (see §12) |
+| Cloud storage | **Amazon S3** | Raw / curated / artifacts zones |
+| IaC | **Terraform** | Provision ECR, S3, IAM, App Runner, CloudWatch |
+| CI/CD | **GitHub Actions** | Build & push image on every `main` push |
+| Monitoring | **Amazon CloudWatch** | Logs, metrics, CPU / 5xx alarms |
 
 ---
 
@@ -157,6 +166,14 @@ ds02-demand-forecasting/
 │   └── api.py                # 2.2.8
 ├── models/                   # saved tft_model.ckpt
 ├── mlruns/                   # MLflow SQLite DB + artifacts
+├── scripts/deploy/           # build_and_push + sync_artifacts_to_s3 (ps1/sh)
+├── infra/
+│   ├── apprunner.yaml        # App Runner source-build config (alternative path)
+│   └── terraform/            # ECR, S3, IAM, App Runner, CloudWatch (IaC)
+├── .github/workflows/        # deploy.yml — CI/CD build & push to ECR
+├── docs/DEPLOYMENT.md        # AWS deployment guide (see §12)
+├── Dockerfile                # API container image (FastAPI + baked artifacts)
+├── .dockerignore
 ├── run_all.py                # one-shot pipeline driver
 ├── requirements.txt
 └── README.md
@@ -384,5 +401,44 @@ curl http://127.0.0.1:8000/drift
 
 ---
 
-*DS-02 — backend-only, local, free-tier demand forecasting. No Docker, no cloud
-services required to run.*
+## 12. AWS Deployment
+
+The app runs fully locally with **no AWS required** (everything above). For cloud
+hosting, a complete **deployment-config layer** is included that matches the
+*Infrastructure (AWS)* lane of the architecture diagram — without changing any
+application code.
+
+**Target topology:** Docker image → **Amazon ECR** → **AWS App Runner** (HTTPS
+endpoint), with **S3** storage zones (raw / curated / artifacts), **IAM** roles,
+and **CloudWatch** logs + alarms — all provisioned by **Terraform** and built via
+a **GitHub Actions** CI/CD pipeline.
+
+**What was added (no `src/` changes):**
+
+| Path | Purpose |
+|------|---------|
+| [`Dockerfile`](./Dockerfile) + [`.dockerignore`](./.dockerignore) | CPU-only container that serves `src.api:app` with the trained checkpoint + `clean.csv` baked in. |
+| [`infra/terraform/`](./infra/terraform/) | ECR repo, three S3 buckets, IAM (ECR-access + instance roles), App Runner service + auto-scaling, CloudWatch alarms. |
+| [`infra/apprunner.yaml`](./infra/apprunner.yaml) | Optional App Runner *source-build* config (the ECR image path is primary). |
+| [`scripts/deploy/`](./scripts/deploy/) | `build_and_push` + `sync_artifacts_to_s3` (PowerShell **and** bash). |
+| [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml) | CI/CD: build → push to ECR → App Runner auto-redeploys. |
+
+**Quick start:**
+
+```bash
+python run_all.py --synthetic --epochs 5          # produce the baked-in artifacts
+cd infra/terraform && terraform init
+terraform apply -target=aws_ecr_repository.app     # phase 1: registry only
+cd ../.. && ./scripts/deploy/build_and_push.sh     # build + push the image
+cd infra/terraform && terraform apply              # phase 2: App Runner + rest
+terraform output -raw service_url                  # -> https://....awsapprunner.com
+```
+
+Full step-by-step instructions, OIDC CI/CD setup, observability, and teardown are
+in **[`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md)**.
+
+---
+
+*DS-02 — backend-only demand forecasting that runs locally for free, and ships to
+AWS App Runner (ECR + S3 + CloudWatch, via Terraform) when you want it in the
+cloud. See [§12](#12-aws-deployment).*

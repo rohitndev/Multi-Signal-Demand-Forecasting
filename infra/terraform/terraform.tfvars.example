@@ -1,0 +1,20 @@
+# Copy to terraform.tfvars and adjust. All values have sensible defaults in
+# variables.tf, so an empty terraform.tfvars also works.
+
+aws_region   = "us-east-1"
+project_name = "ds02-demand-forecasting"
+environment  = "prod"
+image_tag    = "latest"
+
+# App Runner sizing. 1 vCPU / 4 GB is comfortable for the torch-based API.
+app_runner_cpu    = "1024"
+app_runner_memory = "4096"
+
+# Auto-scaling bounds.
+min_size        = 1
+max_size        = 3
+max_concurrency = 50
+
+# Optional: set an email to receive CloudWatch CPU / 5xx alarm notifications.
+# Leave empty to skip creating the SNS topic + subscription.
+alarm_email = ""

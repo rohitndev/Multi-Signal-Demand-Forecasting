@@ -1,4 +1,4 @@
-# DS-02 — Multi-Signal Demand Forecasting System (Temporal Fusion Transformer)
+# Multi-Signal Demand Forecasting System (Temporal Fusion Transformer)
 
 > A backend-only, locally-runnable demand forecasting platform that combines a
 > **Temporal Fusion Transformer (TFT)** with multiple exogenous signals
@@ -13,7 +13,7 @@
 
 ![project-overview](./screenshots/project-overview.jpeg)
 
-DS-02 forecasts daily retail demand for the **Rossmann Store Sales** dataset and
+The Multi-Signal Demand Forecasting System forecasts daily retail demand for the **Rossmann Store Sales** dataset and
 turns those forecasts into business actions. It produces **probabilistic
 forecasts** (P10 / P50 / P90 quantiles) using a Temporal Fusion Transformer,
 enriches the model with **multi-signal context** (weather, search interest,
@@ -147,7 +147,7 @@ Shared configuration lives in [`config.py`](./src/config.py) (paths + `.env` loa
 ## 4. Project Structure
 
 ```
-ds02-demand-forecasting/
+multi-signal-demand-forecasting/
 ├── data/
 │   ├── raw/                  # train.csv + store.csv go here
 │   └── processed/            # clean.csv is written here
@@ -242,7 +242,7 @@ python -m scripts.make_synthetic_data
 ## 7. Installation
 
 ```bash
-# from inside ds02-demand-forecasting/
+# from inside multi-signal-demand-forecasting/
 python -m venv .venv
 
 # Windows (PowerShell)
@@ -439,6 +439,6 @@ in **[`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md)**.
 
 ---
 
-*DS-02 — backend-only demand forecasting that runs locally for free, and ships to
+*Multi-Signal Demand Forecasting System — backend-only demand forecasting that runs locally for free, and ships to
 AWS App Runner (ECR + S3 + CloudWatch, via Terraform) when you want it in the
 cloud. See [§12](#12-aws-deployment).*

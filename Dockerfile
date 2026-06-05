@@ -1,15 +1,15 @@
 # syntax=docker/dockerfile:1
 ###############################################################################
-# DS-02 Multi-Signal Demand Forecasting — API container image
+# Multi-Signal Demand Forecasting System — API container image
 #
 # Serves the FastAPI app (src.api:app) on port 8000. The trained TFT checkpoint
 # and the cleaned dataset are baked in, so the container is self-contained and
 # ready for AWS App Runner (image pulled from Amazon ECR).
 #
 # Build (from the repo root, after producing the artifacts with run_all.py):
-#     docker build -t ds02-demand-forecasting .
+#     docker build -t multi-signal-demand-forecasting .
 # Run locally:
-#     docker run -p 8000:8000 ds02-demand-forecasting
+#     docker run -p 8000:8000 multi-signal-demand-forecasting
 ###############################################################################
 FROM python:3.12-slim AS base
 

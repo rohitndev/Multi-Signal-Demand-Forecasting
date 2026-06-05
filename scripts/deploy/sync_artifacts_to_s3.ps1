@@ -9,9 +9,9 @@
 
 .EXAMPLE
   .\scripts\deploy\sync_artifacts_to_s3.ps1 `
-    -ArtifactsBucket ds02-demand-forecasting-artifacts-123456789012 `
-    -CuratedBucket  ds02-demand-forecasting-curated-123456789012 `
-    -RawBucket      ds02-demand-forecasting-raw-123456789012
+    -ArtifactsBucket multi-signal-demand-forecasting-artifacts-123456789012 `
+    -CuratedBucket  multi-signal-demand-forecasting-curated-123456789012 `
+    -RawBucket      multi-signal-demand-forecasting-raw-123456789012
 #>
 param(
   [Parameter(Mandatory = $true)][string]$ArtifactsBucket,

@@ -1,22 +1,22 @@
 ﻿.\.venv\Scripts\python.exe : 
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field 
 "model_name" in PromptModelConfig has conflict with protected namespace "model_".
 At line:1 char:33
 + ... hotsfolder; .\.venv\Scripts\python.exe run_all.py --synthetic *>&1 |  ...
 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (D:\rohit\ds02-d...space "model_".:String) [], RemoteException
+    + CategoryInfo          : NotSpecified: (D:\rohit\multi-signal-d...space "model_".:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError
  
 
 You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
   warnings.warn(
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\pytorch_forecasting\data\encoders.py:402: UserWarning: Found 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\pytorch_forecasting\data\encoders.py:402: UserWarning: Found 
 1 unknown classes which were set to NaN
   warnings.warn(
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 'loss' 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 'loss' 
 is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using 
 `self.save_hyperparameters(ignore=['loss'])`.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 
 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore 
 them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
 GPU available: False, used: False
@@ -29,8 +29,8 @@ to the Lightning Experiments platform.
   [0/5] Generating synthetic dataset
 ======================================================================
 Synthetic Rossmann-style data written:
-  D:\rohit\ds02-demand-forecasting\data\raw\train.csv  (1,320 rows)
-  D:\rohit\ds02-demand-forecasting\data\raw\store.csv  (6 rows)
+  D:\rohit\multi-signal-demand-forecasting\data\raw\train.csv  (1,320 rows)
+  D:\rohit\multi-signal-demand-forecasting\data\raw\store.csv  (6 rows)
   NOTE: synthetic data for testing only ù replace with the real Kaggle CSVs.
 
 ======================================================================
@@ -40,7 +40,7 @@ Ingestion complete.
   Rows (open days)   : 1,134
   Stores             : 6
   Date range         : 2014-01-01 -> 2014-08-08
-  Saved clean CSV to : D:\rohit\ds02-demand-forecasting\data\processed\clean.csv
+  Saved clean CSV to : D:\rohit\multi-signal-demand-forecasting\data\processed\clean.csv
 
 ======================================================================
   [2/5] Training TFT (5 epochs, 6 stores)
@@ -77,10 +77,10 @@ Total estimated model params size (MB): 0.099
 Modules in train mode: 415                                                     
 Modules in eval mode: 0                                                        
 Total FLOPs: 0                                                                 
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
 The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
 `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
 The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
 `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
 `Trainer.fit` stopped: `max_epochs=5` reached.
@@ -91,7 +91,7 @@ Epoch 4/4  ------------------ 9/9 0:00:01 ò 0:00:00 6.65it/s train_loss_step:
                                                              233.253           
 GPU available: False, used: False
 TPU available: False, using: 0 TPU cores
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\logger_connector\logger_c
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\logger_connector\logger_c
 onnector.py:76: Starting from v1.9.0, `tensorboardX` has been removed as a dependency of the `lightning.pytorch` 
 package, due to potential conflicts with other packages in the ML ecosystem. For this reason, `logger=True` will use 
 `CSVLogger` as the default logger, unless the `tensorboard` or `tensorboardX` packages are found. Please `pip install 
@@ -102,17 +102,17 @@ to the Lightning Experiments platform.
 \U0001f4a1 Tip: For seamless cloud uploads and versioning, try installing 
 [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the 
 Lightning model registry.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
 The 'predict_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
 `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
 `weights_only` was not set, defaulting to `False`.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 'loss' 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 'loss' 
 is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using 
 `self.save_hyperparameters(ignore=['loss'])`.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\utilities\parsing.py:213: Attribute 
 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore 
 them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\pytorch_forecasting\data\encoders.py:402: UserWarning: Found 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\pytorch_forecasting\data\encoders.py:402: UserWarning: Found 
 1 unknown classes which were set to NaN
   warnings.warn(
 GPU available: False, used: False
@@ -123,14 +123,14 @@ to the Lightning Experiments platform.
 \U0001f4a1 Tip: For seamless cloud uploads and versioning, try installing 
 [litmodels](https://pypi.org/project/litmodels/) to enable LitModelCheckpoint, which syncs automatically with the 
 Lightning model registry.
-D:\rohit\ds02-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
+D:\rohit\multi-signal-demand-forecasting\.venv\Lib\site-packages\lightning\pytorch\trainer\connectors\data_connector.py:434: 
 The 'predict_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the 
 `num_workers` argument` to `num_workers=11` in the `DataLoader` to improve performance.
 
 Training complete.
   Final MAPE : 7.28%
   Final MAE  : 414.24
-  Checkpoint : D:\rohit\ds02-demand-forecasting\models\tft_model.ckpt
+  Checkpoint : D:\rohit\multi-signal-demand-forecasting\models\tft_model.ckpt
 
 >>> Training MAPE: 7.28%
 
@@ -196,7 +196,7 @@ MAPE degraded >3%: False
 
 ======================================================================
   PIPELINE COMPLETE in 31.3s
-  Clean data : D:\rohit\ds02-demand-forecasting\data\processed\clean.csv
-  Checkpoint : D:\rohit\ds02-demand-forecasting\models\tft_model.ckpt
+  Clean data : D:\rohit\multi-signal-demand-forecasting\data\processed\clean.csv
+  Checkpoint : D:\rohit\multi-signal-demand-forecasting\models\tft_model.ckpt
   Next: serve it with  ->  uvicorn src.api:app --reload
 ======================================================================

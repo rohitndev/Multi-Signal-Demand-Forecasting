@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "project_name" {
   description = "Identifier-safe project name used to prefix/name resources."
   type        = string
-  default     = "ds02-demand-forecasting"
+  default     = "multi-signal-demand-forecasting"
 }
 
 variable "environment" {

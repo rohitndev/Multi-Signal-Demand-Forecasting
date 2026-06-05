@@ -1,4 +1,4 @@
-# AWS Deployment Guide — DS-02 Demand Forecasting
+# AWS Deployment Guide — Multi-Signal Demand Forecasting System
 
 This guide deploys the FastAPI service to **AWS App Runner**, pulling a Docker
 image from **Amazon ECR**, with **S3** storage zones, **IAM** roles, and
@@ -73,7 +73,7 @@ Note the repository URL:
 
 ```bash
 terraform output -raw ecr_repository_url
-# e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com/ds02-demand-forecasting
+# e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com/multi-signal-demand-forecasting
 ```
 
 ---
@@ -84,12 +84,12 @@ From the **repo root**:
 
 ```bash
 # Linux / macOS
-./scripts/deploy/build_and_push.sh us-east-1 ds02-demand-forecasting latest
+./scripts/deploy/build_and_push.sh us-east-1 multi-signal-demand-forecasting latest
 ```
 
 ```powershell
 # Windows PowerShell
-.\scripts\deploy\build_and_push.ps1 -Region us-east-1 -Repo ds02-demand-forecasting -Tag latest
+.\scripts\deploy\build_and_push.ps1 -Region us-east-1 -Repo multi-signal-demand-forecasting -Tag latest
 ```
 
 These scripts log in to ECR, run `docker build .`, and push the `latest` tag.

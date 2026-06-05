@@ -1,6 +1,8 @@
 # Auto-scaling policy: how aggressively App Runner adds/removes instances.
 resource "aws_apprunner_auto_scaling_configuration_version" "app" {
-  auto_scaling_configuration_name = local.name_prefix
+  # App Runner caps this name at 32 chars, so use the (shorter) project name
+  # rather than the "<project>-<environment>" prefix used elsewhere.
+  auto_scaling_configuration_name = var.project_name
   max_concurrency                 = var.max_concurrency
   min_size                        = var.min_size
   max_size                        = var.max_size

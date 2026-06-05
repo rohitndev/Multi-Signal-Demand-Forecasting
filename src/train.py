@@ -121,13 +121,13 @@ def train(epochs: int = 5, n_stores: int | None = 20) -> float:
     # Artifacts (the checkpoint) still land under mlruns/.
     db_uri = f"sqlite:///{(MLRUNS_DIR / 'mlflow.db').as_posix()}"
     mlflow.set_tracking_uri(db_uri)
-    experiment = mlflow.get_experiment_by_name("ds02-tft-demand-forecasting")
+    experiment = mlflow.get_experiment_by_name("multi-signal-tft-demand-forecasting")
     if experiment is None:
         mlflow.create_experiment(
-            "ds02-tft-demand-forecasting",
+            "multi-signal-tft-demand-forecasting",
             artifact_location=(MLRUNS_DIR / "artifacts").as_uri(),
         )
-    mlflow.set_experiment("ds02-tft-demand-forecasting")
+    mlflow.set_experiment("multi-signal-tft-demand-forecasting")
 
     with mlflow.start_run():
         mlflow.log_params(

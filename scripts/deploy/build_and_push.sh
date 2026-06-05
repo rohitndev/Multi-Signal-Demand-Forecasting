@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Build the DS-02 Docker image and push it to Amazon ECR.
+# Build the Multi-Signal Demand Forecasting Docker image and push it to Amazon ECR.
 #
 # Usage:
 #   ./scripts/deploy/build_and_push.sh [region] [repo] [tag]
 # Example:
-#   ./scripts/deploy/build_and_push.sh us-east-1 ds02-demand-forecasting latest
+#   ./scripts/deploy/build_and_push.sh us-east-1 multi-signal-demand-forecasting latest
 set -euo pipefail
 
 REGION="${1:-us-east-1}"
-REPO="${2:-ds02-demand-forecasting}"
+REPO="${2:-multi-signal-demand-forecasting}"
 TAG="${3:-latest}"
 
 # Run from the repo root so the Docker build context is correct.

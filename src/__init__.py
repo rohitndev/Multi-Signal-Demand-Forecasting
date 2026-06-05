@@ -1,1 +1,1 @@
-"""DS-02 Multi-Signal Demand Forecasting backend."""
+"""Multi-Signal Demand Forecasting System backend."""

@@ -1,4 +1,4 @@
-# DS-02 Demand Forecasting — verified working on Python 3.11 and 3.12 (CPU).
+# Multi-Signal Demand Forecasting System — verified working on Python 3.11 and 3.12 (CPU).
 #
 # NOTE: the original spec pinned older versions (torch 2.2.2, pytorch-forecasting
 # 1.0.0, evidently 0.4.25). Those have NO wheels for Python 3.12 and/or break on

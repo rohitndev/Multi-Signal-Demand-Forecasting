@@ -21,7 +21,7 @@ from src import agent as agent_mod
 from src import drift as drift_mod
 
 app = FastAPI(
-    title="DS-02 Multi-Signal Demand Forecasting",
+    title="Multi-Signal Demand Forecasting System",
     description="TFT-based demand forecasting with replenishment agent and drift detection.",
     version="1.0.0",
 )

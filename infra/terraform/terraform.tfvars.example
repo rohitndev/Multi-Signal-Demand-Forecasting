@@ -2,7 +2,7 @@
 # variables.tf, so an empty terraform.tfvars also works.
 
 aws_region   = "us-east-1"
-project_name = "ds02-demand-forecasting"
+project_name = "multi-signal-demand-forecasting"
 environment  = "prod"
 image_tag    = "latest"
 

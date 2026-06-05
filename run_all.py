@@ -1,7 +1,8 @@
 """
 run_all.py
 ----------
-One-shot driver that runs the entire DS-02 pipeline end to end:
+One-shot driver that runs the entire Multi-Signal Demand Forecasting pipeline
+end to end:
 
     ingest -> train (TFT) -> predict -> replenishment agent -> drift report
 
@@ -37,7 +38,9 @@ def _banner(step: str, title: str) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run the full DS-02 pipeline.")
+    parser = argparse.ArgumentParser(
+        description="Run the full Multi-Signal Demand Forecasting pipeline."
+    )
     parser.add_argument("--synthetic", action="store_true",
                         help="Generate synthetic Rossmann-style data first.")
     parser.add_argument("--epochs", type=int, default=5)

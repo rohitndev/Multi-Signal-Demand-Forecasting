@@ -11,7 +11,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: ds02-demand-forecasting
+  ECR_REPOSITORY: multi-signal-demand-forecasting
   IMAGE_TAG: latest
 
 permissions:

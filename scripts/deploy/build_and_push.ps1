@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Build the DS-02 Docker image and push it to Amazon ECR.
+  Build the Multi-Signal Demand Forecasting Docker image and push it to Amazon ECR.
 
 .DESCRIPTION
   Logs in to ECR, builds the image from the repo root (which bakes in the
@@ -9,11 +9,11 @@
   redeploys automatically.
 
 .EXAMPLE
-  .\scripts\deploy\build_and_push.ps1 -Region us-east-1 -Repo ds02-demand-forecasting -Tag latest
+  .\scripts\deploy\build_and_push.ps1 -Region us-east-1 -Repo multi-signal-demand-forecasting -Tag latest
 #>
 param(
   [string]$Region = "us-east-1",
-  [string]$Repo   = "ds02-demand-forecasting",
+  [string]$Repo   = "multi-signal-demand-forecasting",
   [string]$Tag    = "latest"
 )
 $ErrorActionPreference = "Stop"

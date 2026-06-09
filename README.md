@@ -439,6 +439,6 @@ in **[`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md)**.
 
 ---
 
-*Multi-Signal Demand Forecasting System — backend-only demand forecasting that runs locally for free, and ships to
+*Multi-Signal Demand Forecasting System — demand forecasting that runs locally for free, and ships to
 AWS App Runner (ECR + S3 + CloudWatch, via Terraform) when you want it in the
 cloud. See [§12](#12-aws-deployment).*
